@@ -8,13 +8,27 @@
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link rel="stylesheet" href="style.css">
+    <style>
+        [x-cloak] { display: none !important; }
+        /* Animation pour le défilement infini */
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-infinite-scroll {
+            display: flex;
+            width: max-content;
+            animation: scroll 30s linear infinite;
+        }
+        .animate-infinite-scroll:hover { animation-play-state: paused; }
+    </style>
 </head>
 <body class="bg-white text-black font-sans overflow-x-hidden" x-data="shop">
 
-    <nav class="sticky top-0 z-50 bg-white border-b-4 border-black">
+    <nav class="sticky top-0 z-50 bg-white border-b-4 border-black" x-data="{ mobileMenu: false }">
         <div class="max-w-7xl mx-auto px-4 flex justify-between h-20 items-center">
             <div @click="page = 'home'; window.scrollTo(0,0)" class="cursor-pointer">
-                <span class="text-3xl font-black italic tracking-tighter uppercase">ANKY<span class="text-red-600">JAP</span></span>
+                <span class="text-2xl md:text-3xl font-black italic tracking-tighter uppercase">ANKY<span class="text-red-600">JAP</span></span>
             </div>
             
             <div class="hidden md:flex space-x-8 font-black uppercase text-sm tracking-widest">
@@ -25,43 +39,62 @@
                 </button>
             </div>
 
-            <button @click="cartOpen = true" class="relative p-2">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                <span class="absolute top-0 right-0 bg-red-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-black" x-text="cart.length"></span>
-            </button>
+            <div class="flex items-center gap-4">
+                <button @click="cartOpen = true" class="relative p-2">
+                    <svg class="w-7 h-7 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                    <span class="absolute top-0 right-0 bg-red-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-black" x-text="cart.length"></span>
+                </button>
+                <button @click="mobileMenu = !mobileMenu" class="md:hidden">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <div x-show="mobileMenu" x-transition x-cloak class="md:hidden bg-black text-white p-6 space-y-4 font-black uppercase text-center">
+            <button @click="page = 'home'; mobileMenu = false" class="block w-full">Accueil</button>
+            <button @click="page = 'shop'; mobileMenu = false" class="block w-full">Boutique</button>
+            <button @click="page = 'drop'; mobileMenu = false" class="block w-full text-red-600">Prochain Drop</button>
         </div>
     </nav>
 
     <main>
-        <div x-show="page === 'home'" x-transition>
-            <section class="hero-section">
-                <div class="text-center z-10">
-                    <h1 class="glitch-title">ANKYJAP</h1>
-                    <p class="text-white text-xl tracking-[0.4em] font-black italic mt-4 uppercase">Sacred Inked Armor</p>
-                    <button @click="page = 'shop'" class="btn-shonen mt-10">DÉCOUVRIR LE SHOP</button>
+        <div x-show="page === 'home'" x-transition x-cloak>
+            <section class="hero-section min-h-[80vh] flex items-center justify-center bg-black relative">
+                <div class="text-center z-10 px-4">
+                    <h1 class="glitch-title text-5xl md:text-9xl font-black text-white italic">ANKYJAP</h1>
+                    <p class="text-white text-sm md:text-xl tracking-[0.4em] font-black italic mt-4 uppercase">Sacred Inked Armor</p>
+                    <button @click="page = 'shop'" class="btn-shonen mt-10 px-8 py-4 bg-red-600 text-white font-black skew-x-[-10deg] hover:bg-white hover:text-red-600 transition">DÉCOUVRIR LE SHOP</button>
                 </div>
             </section>
 
-            <section class="py-24 max-w-7xl mx-auto px-6 aos-init">
-                <div class="flex flex-col md:flex-row items-center gap-16">
-                    <div class="w-full md:w-1/2 ink-splash-mask shadow-2xl">
+            <section class="py-16 md:py-24 max-w-7xl mx-auto px-6">
+                <div class="flex flex-col md:flex-row items-center gap-10 md:gap-16">
+                    <div class="w-full md:w-1/2 ink-splash-mask shadow-2xl overflow-hidden border-4 border-black">
                         <img src="https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?q=80&w=2070" class="w-full h-full object-cover">
                     </div>
                     <div class="w-full md:w-1/2">
-                        <h2 class="text-6xl font-black italic uppercase leading-none">Style <span class="text-red-600 italic">Katana</span></h2>
-                        <p class="text-xl font-bold mt-6 italic">Inspiré par la brutalité du trait de plume japonais. Chaque vêtement est une trace d'encre sur le bitume.</p>
+                        <h2 class="text-4xl md:text-6xl font-black italic uppercase leading-none">Style <span class="text-red-600 italic">Katana</span></h2>
+                        <p class="text-lg md:text-xl font-bold mt-6 italic">Inspiré par la brutalité du trait de plume japonais. Chaque vêtement est une trace d'encre sur le bitume.</p>
                     </div>
                 </div>
             </section>
 
             <section class="bg-black py-16 overflow-hidden border-y-4 border-red-600">
-                <div class="animate-infinite-scroll flex gap-8">
+                <div class="animate-infinite-scroll">
                     <template x-for="i in 2">
-                        <div class="flex gap-8">
+                        <div class="flex">
                             <template x-for="product in products" :key="product.id">
-                                <div class="min-w-[300px] bg-white border-4 border-black p-4">
-                                    <img :src="product.image" class="w-full h-64 object-cover">
-                                    <h3 class="text-xl font-black mt-4 uppercase" x-text="product.name"></h3>
+                                <div class="w-[280px] md:w-[350px] bg-white border-4 border-black p-4 mx-4 flex flex-col group">
+                                    <div class="relative overflow-hidden">
+                                        <img :src="product.image" class="w-full h-64 object-cover">
+                                        <button @click="addToCart(product)" class="absolute inset-x-0 bottom-0 bg-red-600 text-white py-3 font-black uppercase translate-y-full group-hover:translate-y-0 transition-transform text-sm">
+                                            Ajouter +
+                                        </button>
+                                    </div>
+                                    <div class="flex justify-between items-center mt-4">
+                                        <h3 class="text-lg font-black uppercase" x-text="product.name"></h3>
+                                        <span class="text-red-600 font-black" x-text="product.price + '€'"></span>
+                                    </div>
                                 </div>
                             </template>
                         </div>
@@ -70,9 +103,9 @@
             </section>
         </div>
 
-        <div x-show="page === 'shop'" class="max-w-7xl mx-auto py-20 px-6" x-transition>
-            <h2 class="text-7xl font-black italic uppercase mb-12 border-b-8 border-black">Stock</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+        <div x-show="page === 'shop'" class="max-w-7xl mx-auto py-12 md:py-20 px-6" x-transition x-cloak>
+            <h2 class="text-5xl md:text-7xl font-black italic uppercase mb-12 border-b-8 border-black">Stock</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
                 <template x-for="product in products" :key="product.id">
                     <div class="bg-white border-4 border-black p-2 group relative">
                         <div class="aspect-[3/4] overflow-hidden border-2 border-black relative">
@@ -82,7 +115,7 @@
                             </button>
                         </div>
                         <div class="p-4 flex justify-between items-center">
-                            <span class="font-black uppercase text-sm" x-text="product.name"></span>
+                            <span class="font-black uppercase text-xs md:text-sm" x-text="product.name"></span>
                             <span class="text-red-600 font-black" x-text="product.price + '€'"></span>
                         </div>
                     </div>
@@ -90,26 +123,26 @@
             </div>
         </div>
 
-        <div x-show="page === 'drop'" class="min-h-screen bg-black text-white flex flex-col justify-center items-center px-4" x-transition>
-            <h2 class="text-6xl md:text-[10rem] font-black italic leading-none mb-8">JUNE <span class="text-red-600">2026</span></h2>
+        <div x-show="page === 'drop'" class="min-h-screen bg-black text-white flex flex-col justify-center items-center px-4" x-transition x-cloak>
+            <h2 class="text-5xl md:text-[10rem] font-black italic leading-none mb-8 text-center">JUNE <span class="text-red-600">2026</span></h2>
             
-            <div class="flex gap-4 md:gap-10 mb-16">
-                <div class="bg-white text-black p-6 border-b-8 border-red-600"><span class="text-4xl md:text-7xl font-black" x-text="countdown.d"></span><p class="text-xs font-bold uppercase">Jours</p></div>
-                <div class="bg-white text-black p-6 border-b-8 border-red-600"><span class="text-4xl md:text-7xl font-black" x-text="countdown.h"></span><p class="text-xs font-bold uppercase">Heures</p></div>
-                <div class="bg-white text-black p-6 border-b-8 border-red-600"><span class="text-4xl md:text-7xl font-black" x-text="countdown.m"></span><p class="text-xs font-bold uppercase">Mins</p></div>
-                <div class="bg-white text-black p-6 border-b-8 border-red-600"><span class="text-4xl md:text-7xl font-black" x-text="countdown.s"></span><p class="text-xs font-bold uppercase">Secs</p></div>
+            <div class="grid grid-cols-2 md:flex gap-4 md:gap-10 mb-16">
+                <div class="bg-white text-black p-4 md:p-6 border-b-8 border-red-600 text-center"><span class="text-4xl md:text-7xl font-black" x-text="countdown.d"></span><p class="text-xs font-bold uppercase">Jours</p></div>
+                <div class="bg-white text-black p-4 md:p-6 border-b-8 border-red-600 text-center"><span class="text-4xl md:text-7xl font-black" x-text="countdown.h"></span><p class="text-xs font-bold uppercase">Heures</p></div>
+                <div class="bg-white text-black p-4 md:p-6 border-b-8 border-red-600 text-center"><span class="text-4xl md:text-7xl font-black" x-text="countdown.m"></span><p class="text-xs font-bold uppercase">Mins</p></div>
+                <div class="bg-white text-black p-4 md:p-6 border-b-8 border-red-600 text-center"><span class="text-4xl md:text-7xl font-black" x-text="countdown.s"></span><p class="text-xs font-bold uppercase">Secs</p></div>
             </div>
 
             <div class="w-full max-w-lg">
                 <template x-if="!mailSubmitted">
                     <form @submit.prevent="submitMail()" class="flex flex-col md:flex-row border-4 border-white p-2">
-                        <input x-model="email" type="email" placeholder="ACCÈS@SHINOBI.JP" class="bg-transparent flex-1 p-4 outline-none font-bold text-white uppercase" required>
+                        <input x-model="email" type="email" placeholder="ACCÈS@SHINOBI.JP" class="bg-transparent flex-1 p-4 outline-none font-bold text-white uppercase text-center md:text-left" required>
                         <button type="submit" class="bg-white text-black px-8 py-4 font-black uppercase hover:bg-red-600 hover:text-white transition">S'inscrire</button>
                     </form>
                 </template>
                 <template x-if="mailSubmitted">
                     <div class="bg-red-600 p-8 border-4 border-white text-center animate__animated animate__zoomIn">
-                        <h3 class="text-2xl font-black uppercase italic italic">Enregistré dans la base ⛩️</h3>
+                        <h3 class="text-2xl font-black uppercase italic">Enregistré dans la base ⛩️</h3>
                     </div>
                 </template>
             </div>
@@ -117,23 +150,31 @@
     </main>
 
     <div x-show="cartOpen" class="fixed inset-0 z-[100]" x-cloak>
-        <div class="absolute inset-0 bg-black/90" @click="cartOpen = false"></div>
-        <div class="absolute inset-y-0 right-0 w-full md:max-w-md bg-white p-8 border-l-8 border-red-600 overflow-y-auto">
+        <div class="absolute inset-0 bg-black/90" @click="cartOpen = false" x-show="cartOpen" x-transition.opacity></div>
+        <div class="absolute inset-y-0 right-0 w-full md:max-w-md bg-white p-6 md:p-8 border-l-0 md:border-l-8 border-red-600 overflow-y-auto" x-show="cartOpen" x-transition.origin.right>
             <div class="flex justify-between items-center mb-10 border-b-4 border-black pb-4">
-                <h2 class="text-4xl font-black italic">PANIER</h2>
+                <h2 class="text-3xl md:text-4xl font-black italic">PANIER</h2>
                 <button @click="cartOpen = false" class="text-4xl font-light">&times;</button>
             </div>
-            <template x-for="(item, index) in cart" :key="index">
-                <div class="flex gap-4 mb-4 p-2 border-2 border-black bg-gray-50">
-                    <img :src="item.image" class="w-16 h-20 object-cover">
-                    <div class="flex-1">
-                        <p class="font-black text-xs uppercase" x-text="item.name"></p>
-                        <p class="text-red-600 font-bold" x-text="item.price + '€'"></p>
+            
+            <div class="space-y-4">
+                <template x-for="(item, index) in cart" :key="index">
+                    <div class="flex gap-4 p-2 border-2 border-black bg-gray-50">
+                        <img :src="item.image" class="w-16 h-20 object-cover border border-black">
+                        <div class="flex-1">
+                            <p class="font-black text-xs uppercase" x-text="item.name"></p>
+                            <p class="text-red-600 font-bold" x-text="item.price + '€'"></p>
+                        </div>
+                        <button @click="removeFromCart(index)" class="font-black text-xs underline text-red-600">SUPPRIMER</button>
                     </div>
-                    <button @click="removeFromCart(index)" class="font-black text-xs underline">X</button>
-                </div>
-            </template>
-            <div class="mt-10 pt-6 border-t-4 border-black">
+                </template>
+                
+                <template x-if="cart.length === 0">
+                    <p class="text-center font-bold italic py-10 text-gray-400 uppercase">Le pack est vide...</p>
+                </template>
+            </div>
+
+            <div class="mt-10 pt-6 border-t-4 border-black" x-show="cart.length > 0">
                 <div class="flex justify-between text-2xl font-black uppercase mb-6">
                     <span>Total</span><span x-text="totalPrice() + '€'"></span>
                 </div>
