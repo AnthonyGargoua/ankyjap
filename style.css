@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700&family=Noto+Sans+JP:wght@400;700&display=swap');
+
+/* Variables et Base */
+:root {
+    --japan-red: #BC002D;
+    --black: #1a1a1a;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', 'Noto Sans JP', sans-serif;
+    overflow-x: hidden;
+}
+
+[x-cloak] { display: none !important; }
+
+/* Couleurs */
+.japan-red { color: var(--japan-red); }
+.bg-japan-red { background-color: var(--japan-red); }
+
+/* Navigation */
+.nav-link {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover { color: var(--japan-red); }
+
+.nav-active {
+    color: var(--japan-red);
+    text-decoration: underline;
+    text-underline-offset: 8px;
+    font-weight: bold;
+}
+
+/* Badge Panier */
+.cart-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: var(--japan-red);
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('https://images.unsplash.com/photo-1542051841857-5f90071e7989?q=80&w=2000');
+    background-size: cover;
+    background-position: center;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.btn-primary {
+    background-color: var(--japan-red);
+    color: white;
+    padding: 1rem 2.5rem;
+    font-weight: bold;
+    letter-spacing: 0.2em;
+    transition: 0.4s;
+}
+
+.btn-primary:hover {
+    background-color: white;
+    color: black;
+}
+
+/* Boutique */
+.product-card {
+    cursor: pointer;
+}
+
+.add-to-cart-btn {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: var(--black);
+    color: white;
+    padding: 1rem;
+    font-weight: bold;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .add-to-cart-btn {
+    transform: translateY(0);
+}
+
+/* Formulaire */
+.form-input {
+    width: 100%;
+    border-bottom: 2px solid #eee;
+    padding: 1rem 0;
+    background: transparent;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.form-input:focus {
+    border-color: var(--japan-red);
+}
