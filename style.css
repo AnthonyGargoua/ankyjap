@@ -4,128 +4,135 @@
     --red: #ff0000;
     --black: #000000;
     --white: #ffffff;
-    --glitch-speed: 500ms;
 }
 
 /* --- Base & Scroll --- */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     font-family: 'Space Grotesk', sans-serif;
     background-color: var(--white);
     color: var(--black);
     overflow-x: hidden;
-    cursor: none; /* Cache le curseur pour le JS */
+    cursor: none; /* Cache le curseur pour le custom cursor */
 }
 
 /* --- Custom Cursor --- */
 #cursor {
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
     background: var(--red);
     border-radius: 50%;
     position: fixed;
     pointer-events: none;
     z-index: 9999;
     mix-blend-difference: difference;
-    transition: transform 0.1s ease-out;
+    transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* --- Typography --- */
-h1, h2, h3, .font-black {
-    font-family: 'Archivo Black', sans-serif;
-    text-transform: uppercase;
+/* --- Effet d'Encre Japonaise (Sumi-e) --- */
+.ink-wrapper {
+    position: relative;
+    overflow: hidden;
+    background: white;
+    transition: 0.5s ease;
 }
 
-/* --- Glitch Effect --- */
+/* Le filtre SVG est appliqué ici via l'ID défini dans le JS */
+.ink-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%) contrast(120%);
+    transition: filter 0.6s ease, transform 0.8s ease;
+}
+
+.ink-wrapper:hover img {
+    /* L'image se tord et coule au survol */
+    filter: url(#ink-dripping) grayscale(100%) contrast(300%) brightness(0.8);
+    transform: scale(1.1) translateY(10px);
+}
+
+/* Effet de bordure qui bave légèrement */
+.ink-wrapper::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 0 40px rgba(0,0,0,0);
+    transition: 0.5s;
+    pointer-events: none;
+}
+
+.ink-wrapper:hover::after {
+    box-shadow: inset 0 0 60px rgba(0,0,0,1);
+}
+
+/* --- Typography & Glitch --- */
+h1, h2, h3, .font-black { font-family: 'Archivo Black', sans-serif; text-transform: uppercase; }
+
 .glitch {
     position: relative;
     display: inline-block;
 }
 
-.glitch::before, .glitch::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: transparent;
+.glitch:hover {
+    animation: glitch-skew 1s infinite linear alternate-reverse;
 }
 
-.glitch:hover::before {
-    left: 2px;
-    text-shadow: -2px 0 #ff00c1;
-    clip: rect(44px, 450px, 56px, 0);
-    animation: glitch-anim 5s infinite linear alternate-reverse;
+@keyframes glitch-skew {
+    0% { transform: skew(2deg); }
+    20% { transform: skew(-3deg); }
+    40% { transform: skew(5deg); }
+    60% { transform: skew(-1deg); }
+    100% { transform: skew(0deg); }
 }
 
-.glitch:hover::after {
-    left: -2px;
-    text-shadow: -2px 0 #00fff9;
-    clip: rect(44px, 450px, 56px, 0);
-    animation: glitch-anim2 5s infinite linear alternate-reverse;
+/* --- Animations de Section (AOS) --- */
+.aos-init {
+    opacity: 0;
+    transform: translateY(80px);
+    transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-@keyframes glitch-anim {
-    0% { clip: rect(31px, 9999px, 94px, 0); }
-    20% { clip: rect(62px, 9999px, 42px, 0); }
-    /* ... ajouter des étapes pour plus de chaos ... */
-    100% { clip: rect(89px, 9999px, 98px, 0); }
+.aos-animate {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
 }
 
-/* --- Carrousel Infini --- */
-@keyframes infinite-scroll {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
+/* --- Buttons & UI --- */
+.btn-shonen {
+    background: var(--red);
+    color: white;
+    padding: 1.2rem 2.5rem;
+    border: 4px solid black;
+    font-weight: 900;
+    box-shadow: 10px 10px 0px black;
+    transition: 0.2s;
+    display: inline-block;
+}
+
+.btn-shonen:hover {
+    transform: translate(10px, 10px);
+    box-shadow: 0px 0px 0px black;
+}
+
+.hero-section {
+    height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&q=80');
+    background-size: cover;
+    background-position: center;
 }
 
 .animate-infinite-scroll {
     display: flex;
     width: max-content;
-    animation: infinite-scroll 40s linear infinite;
+    animation: infinite-scroll 30s linear infinite;
 }
 
-.animate-infinite-scroll:hover {
-    animation-play-state: paused;
-}
-
-/* --- Sections "Manifesto" --- */
-.aos-init {
-    opacity: 0;
-    transform: translateY(50px);
-    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.aos-animate {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* --- Buttons & Cards --- */
-.btn-shonen {
-    position: relative;
-    background: var(--red);
-    color: white;
-    padding: 1rem 2rem;
-    border: 4px solid black;
-    box-shadow: 8px 8px 0px black;
-    transition: all 0.2s;
-}
-
-.btn-shonen:hover {
-    box-shadow: 0px 0px 0px black;
-    transform: translate(8px, 8px);
-}
-
-.product-card {
-    border: 5px solid black;
-    box-shadow: 10px 10px 0px rgba(0,0,0,0.1);
-    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.product-card:hover {
-    transform: scale(1.02) rotate(-1deg);
-    box-shadow: 15px 15px 0px var(--red);
+@keyframes infinite-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
 }
