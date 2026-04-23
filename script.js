@@ -1,6 +1,6 @@
 // --- Blindage du Compteur ---
 // On définit la date du drop et la fonction de calcul AVANT Alpine
-const DROP_DATE_STR = "2026-06-15T10:00:00"; // CHANGE LA DATE ICI (Format ISO)
+const DROP_DATE_STR = "2027-06-15T10:00:00"; // CHANGE LA DATE ICI (Format ISO)
 const dropDate = new Date(DROP_DATE_STR).getTime();
 
 function calculateCountdown() {
