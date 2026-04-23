@@ -73,19 +73,19 @@
         <div x-show="page === 'home'" class="hero-section">
             <div class="text-center text-white px-4 z-10 w-full overflow-hidden">
                 <h1 class="text-5xl sm:text-7xl md:text-[13rem] font-black italic leading-none animate__animated animate__fadeInDown">ANKYJAP</h1>
-                <p class="text-sm md:text-3xl tracking-[0.3em] md:tracking-[0.8em] mt-4 uppercase font-bold">Sacred Streetwear</p>
-                <button @click="page = 'shop'" class="mt-12 bg-red-600 text-white px-8 md:px-16 py-4 md:py-6 font-black hover:bg-white hover:text-black transition uppercase text-xs md:text-sm tracking-widest border-2 border-red-600">Enter the Shrine</button>
+                <p class="text-sm md:text-3xl tracking-[0.3em] md:tracking-[0.8em] mt-4 uppercase font-bold">Streetwear Japonais, Animé, Manga</p>
+                <button @click="page = 'shop'" class="mt-12 bg-red-600 text-white px-8 md:px-16 py-4 md:py-6 font-black hover:bg-white hover:text-black transition uppercase text-xs md:text-sm tracking-widest border-2 border-red-600">Entrer dans la légende</button>
             </div>
         </div>
 
         <div x-show="page === 'shop'" class="max-w-7xl mx-auto py-12 md:py-20 px-4 animate__animated animate__fadeIn">
-            <h2 class="text-4xl md:text-9xl font-black italic uppercase mb-8 md:mb-12 border-b-4 md:border-b-8 border-black">Store</h2>
+            <h2 class="text-4xl md:text-9xl font-black italic uppercase mb-8 md:mb-12 border-b-4 md:border-b-8 border-black">Boutique</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                 <template x-for="product in products" :key="product.id">
                     <div class="border-2 border-black flex flex-col group bg-white">
                         <div class="relative overflow-hidden aspect-[3/4] bg-gray-100">
                             <img :src="product.image" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
-                            <button @click="addToCart(product)" class="absolute bottom-0 w-full bg-black text-white py-4 md:py-5 font-black text-xs uppercase md:translate-y-full md:group-hover:translate-y-0 transition">Add to Cart</button>
+                            <button @click="addToCart(product)" class="absolute bottom-0 w-full bg-black text-white py-4 md:py-5 font-black text-xs uppercase md:translate-y-full md:group-hover:translate-y-0 transition">Ajouter au panier</button>
                         </div>
                         <div class="p-4 bg-white border-t-2 border-black">
                             <p class="font-black uppercase text-xs truncate" x-text="product.name"></p>
@@ -99,8 +99,8 @@
         <div x-show="page === 'drop'" class="min-h-screen bg-black text-white animate__animated animate__fadeIn flex flex-col">
             <div class="bg-red-600 py-3 md:py-4 overflow-hidden border-y-2 border-white">
                 <div class="marquee-container font-black uppercase italic text-lg md:text-3xl tracking-tighter">
-                    <span class="px-4">TEMPLE DROP // NO RESTOCK // SACRED SERIES // </span>
-                    <span class="px-4">TEMPLE DROP // NO RESTOCK // SACRED SERIES // </span>
+                    <span class="px-4">DROP LIMITE// PAS DE RÉAPPROVISIONNEMENT // SÉRIE SACRÉE //</span>
+                    <span class="px-4">DROP LIMITE// PAS DE RÉAPPROVISIONNEMENT // SÉRIE SACRÉE ///span>
                 </div>
             </div>
 
@@ -118,7 +118,7 @@
                 <div class="max-w-2xl w-full px-4 text-center z-10 mt-12">
                     <template x-if="!mailSubmitted">
                         <div class="animate__animated animate__fadeInUp">
-                            <p class="text-[10px] md:text-sm tracking-[0.3em] md:tracking-[0.5em] text-gray-400 mb-6 uppercase italic font-bold">Inscris-toi pour recevoir le sceau d'accès</p>
+                            <p class="text-[10px] md:text-sm tracking-[0.3em] md:tracking-[0.5em] text-gray-400 mb-6 uppercase italic font-bold">Inscris-toi pour recevoir ton drop en avant première</p>
                             <div class="flex flex-col md:flex-row border-2 md:border-4 border-white">
                                 <input x-model="email" type="email" placeholder="TON EMAIL" class="flex-1 bg-transparent p-4 md:p-6 text-white outline-none font-bold text-base md:text-lg uppercase">
                                 <button @click="submitMail()" class="bg-white text-black px-10 py-4 md:py-6 font-black hover:bg-red-600 hover:text-white transition uppercase text-lg">Rejoindre</button>
