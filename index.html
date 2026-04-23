@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ANKYJAP | Underground Tokyo Streetwear</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-white text-black" x-data="shop" x-init="init()" x-cloak>
+<body class="bg-white text-black" x-data="shop" x-cloak>
 
     <div class="fixed bottom-5 right-5 z-[100]">
         <template x-if="notification">
@@ -34,7 +35,6 @@
                         </span>
                         NEXT DROP
                     </button>
-                    <button @click="page = 'contact'" :class="page === 'contact' ? 'nav-active' : ''" class="nav-link">CONTACT</button>
                 </div>
 
                 <div class="flex items-center space-x-6">
@@ -51,7 +51,7 @@
     </nav>
 
     <div x-show="cartOpen" class="fixed inset-0 z-[60]" style="display: none;">
-        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="cartOpen = false"></div>
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" @click="cartOpen = false"></div>
         <div class="absolute inset-y-0 right-0 max-w-md w-full bg-white p-8 flex flex-col animate__animated animate__slideInRight">
             <div class="flex justify-between items-center border-b-2 border-black pb-4">
                 <h2 class="text-2xl font-black">PANIER</h2>
@@ -60,7 +60,7 @@
             <div class="flex-1 overflow-y-auto py-6">
                 <template x-for="(item, index) in cart" :key="index">
                     <div class="flex items-center justify-between mb-6 border-b border-gray-100 pb-4">
-                        <img :src="item.image" class="w-20 h-24 object-cover grayscale hover:grayscale-0 transition duration-500">
+                        <img :src="item.image" class="w-20 h-24 object-covergrayscale hover:grayscale-0 transition duration-500">
                         <div class="flex-1 px-4">
                             <p class="font-bold uppercase text-sm" x-text="item.name"></p>
                             <p class="text-red-600 font-bold" x-text="item.price + '€'"></p>
@@ -82,10 +82,9 @@
     <main>
         <div x-show="page === 'home'" class="animate__animated animate__fadeIn">
             <div class="hero-section">
-                <div class="hero-overlay"></div>
-                <div class="relative z-10 text-center text-white p-6">
-                    <h1 class="text-7xl md:text-9xl font-black italic tracking-tighter mb-4 animate__animated animate__slideInDown">ANKYJAP</h1>
-                    <p class="text-xl md:text-2xl font-light tracking-[0.4em] uppercase mb-10">Limited Streetwear Design</p>
+                <div class="hero-bg"></div> <div class="relative z-10 text-center text-white p-6">
+                    <h1 class="text-7xl md:text-[10rem] font-black italic tracking-tighter mb-4 animate__animated animate__zoomIn">ANKYJAP</h1>
+                    <p class="text-xl md:text-2xl font-light tracking-[0.4em] uppercase mb-12">Limited Streetwear Design</p>
                     <button @click="page = 'shop'" class="btn-primary">ENTRER DANS LE SHOP</button>
                 </div>
             </div>
@@ -96,11 +95,19 @@
                 <h2 class="text-5xl font-black italic uppercase">Boutique</h2>
                 <span class="text-gray-400 font-bold tracking-widest uppercase text-sm" x-text="products.length + ' PIÈCES DISPONIBLES'"></span>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                <template x-for="product in products" :key="product.id">
-                    <div class="product-card">
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+                <template x-for="(product, index) in products" :key="product.id">
+                    <div class="product-card opacity-0"
+                         x-intersect="$el.classList.add('animate__animated', 'animate__fadeInUp', 'opacity-100')"
+                         :style="'animation-delay: ' + (index * 100) + 'ms'">
+                        
                         <div class="relative overflow-hidden aspect-[3/4] bg-gray-100 border-b border-gray-200">
-                            <img :src="product.image" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                            <template x-if="product.soldOut">
+                                <div class="sold-out-overlay">SOLD OUT</div>
+                            </template>
+                            
+                            <img :src="product.image" class="product-image w-full h-full object-cover">
                             <button @click="addToCart(product)" class="add-to-cart-btn uppercase font-black italic">Ajouter</button>
                         </div>
                         <div class="p-4 bg-white">
@@ -112,37 +119,42 @@
             </div>
         </div>
 
-        <div x-show="page === 'drop'" class="min-h-screen bg-black text-white flex flex-col items-center justify-center p-6 animate__animated animate__zoomIn">
-            <h2 class="text-7xl md:text-[12rem] font-black italic tracking-tighter mb-6 leading-none">NEXT DROP</h2>
-            <div class="flex space-x-6 md:space-x-12 text-center mb-16">
-                <div><span class="text-5xl md:text-8xl font-black" x-text="countdown.d"></span><p class="text-red-600 font-bold text-xs">JOURS</p></div>
-                <div class="text-5xl md:text-8xl font-black">:</div>
-                <div><span class="text-5xl md:text-8xl font-black" x-text="countdown.h"></span><p class="text-red-600 font-bold text-xs">HEURES</p></div>
-                <div class="text-5xl md:text-8xl font-black">:</div>
-                <div><span class="text-5xl md:text-8xl font-black" x-text="countdown.m"></span><p class="text-red-600 font-bold text-xs">MINUTES</p></div>
+        <div x-show="page === 'drop'" class="min-h-screen bg-black text-white p-0 animate__animated animate__zoomIn">
+            <div class="marquee">
+                <div class="marquee-content">
+                    <div class="marquee-item">
+                        <span>// DO NOT MISS // ANKYJAP DROP // DO NOT MISS // ANKYJAP DROP</span>
+                    </div>
+                    <div class="marquee-item">
+                        <span>// DO NOT MISS // ANKYJAP DROP // DO NOT MISS // ANKYJAP DROP</span>
+                    </div>
+                </div>
             </div>
-            <div class="max-w-md w-full border border-gray-800 p-8 text-center">
-                <p class="mb-6 font-bold tracking-widest text-sm text-gray-400 uppercase">Inscrivez-vous pour l'accès prioritaire</p>
-                <div class="flex flex-col space-y-4">
-                    <input type="email" placeholder="EMAIL ADDRESS" class="bg-transparent border-b-2 border-gray-700 p-3 text-center outline-none focus:border-white transition">
-                    <button class="bg-white text-black py-4 font-black hover:bg-red-600 hover:text-white transition uppercase">M'inscrire</button>
+
+            <div class="flex flex-col items-center justify-center pt-24 px-6">
+                <h2 class="text-7xl md:text-[14rem] font-black italic tracking-tighter mb-6 leading-none animate__animated animate__glitch">NEXT DROP</h2>
+                
+                <div class="flex space-x-6 md:space-x-12 text-center mb-20 bg-japan-red p-6">
+                    <div><span class="text-5xl md:text-9xl font-black" x-text="countdown.d"></span><p class="font-bold text-xs uppercase">Jours</p></div>
+                    <div class="text-5xl md:text-9xl font-black">:</div>
+                    <div><span class="text-5xl md:text-9xl font-black" x-text="countdown.h"></span><p class="font-bold text-xs uppercase">Heures</p></div>
+                    <div class="text-5xl md:text-9xl font-black">:</div>
+                    <div><span class="text-5xl md:text-9xl font-black" x-text="countdown.m"></span><p class="font-bold text-xs uppercase">Min</p></div>
+                </div>
+
+                <div class="max-w-md w-full border border-gray-800 p-8 text-center mb-16">
+                    <p class="mb-6 font-bold tracking-widest text-sm text-gray-400 uppercase">Inscrivez-vous pour l'accès prioritaire</p>
+                    <div class="flex flex-col space-y-4">
+                        <input type="email" placeholder="EMAIL ADDRESS" class="bg-transparent border-b-2 border-gray-700 p-3 text-center outline-none focus:border-white transition">
+                        <button class="bg-white text-black py-4 font-black hover:bg-red-600 hover:text-white transition uppercase">M'inscrire</button>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <div x-show="page === 'contact'" class="max-w-2xl mx-auto py-24 px-6 animate__animated animate__fadeIn">
-            <h2 class="text-6xl font-black italic mb-12 border-b-4 border-black pb-4 uppercase">Contact</h2>
-            <form class="space-y-8">
-                <input type="text" placeholder="NOM COMPLET" class="form-input">
-                <input type="email" placeholder="EMAIL" class="form-input">
-                <textarea rows="5" placeholder="MESSAGE" class="form-input"></textarea>
-                <button @click.prevent="showNotification('MESSAGE ENVOYÉ ⛩️')" class="w-full bg-black text-white py-5 font-black hover:bg-red-600 transition tracking-[0.3em]">ENVOYER</button>
-            </form>
-        </div>
     </main>
 
-    <footer class="bg-black text-white py-20 px-6 text-center">
-        <span class="text-4xl italic font-black mb-8 block tracking-tighter">ANKY<span class="text-red-600">JAP</span></span>
+    <footer class="bg-black text-white py-24 px-6 text-center mt-20 border-t-4 border-red-600">
+        <span class="text-5xl italic font-black mb-8 block tracking-tighter logo-text">ANKY<span class="text-red-600">JAP</span></span>
         <p class="text-gray-500 text-xs tracking-[0.5em] uppercase">Tokyo Underground Culture &copy; 2026</p>
     </footer>
 
