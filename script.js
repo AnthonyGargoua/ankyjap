@@ -2,39 +2,68 @@ document.addEventListener('alpine:init', () => {
     Alpine.data('shop', () => ({
         page: 'home',
         cartOpen: false,
+        mobileMenu: false,
         cart: [],
-        
-        // Logique Mail
         email: '',
         mailSubmitted: false,
-        
-        // --- DATE DU DROP ---
         dropDate: new Date(2026, 11, 25, 20, 0, 0).getTime(), 
         countdown: { d: "00", h: "00", m: "00", s: "00" },
 
         init() {
             this.updateCounter();
             setInterval(() => this.updateCounter(), 1000);
+            this.initCursor();
+            this.initAOS();
         },
 
-        submitMail() {
-            if (this.email.includes('@')) {
-                this.mailSubmitted = true;
-                // Ici tu pourrais ajouter un envoi vers une base de données
-            } else {
-                alert("Veuillez entrer un email valide.");
-            }
+        // --- Système de Curseur Zinzin ---
+        initCursor() {
+            const cursor = document.createElement('div');
+            cursor.id = 'cursor';
+            document.body.appendChild(cursor);
+
+            window.addEventListener('mousemove', (e) => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            });
+
+            // Effet d'agrandissement sur les éléments cliquables
+            const links = document.querySelectorAll('button, a, .cursor-pointer');
+            links.forEach(link => {
+                link.addEventListener('mouseenter', () => cursor.style.transform = 'scale(3)');
+                link.addEventListener('mouseleave', () => cursor.style.transform = 'scale(1)');
+            });
+        },
+
+        // --- Animations au Scroll (Manifesto) ---
+        initAOS() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('aos-animate');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.aos-init').forEach(el => observer.observe(el));
         },
 
         updateCounter() {
             const now = new Date().getTime();
             const diff = this.dropDate - now;
-            
             if (diff > 0) {
                 this.countdown.d = Math.floor(diff / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
                 this.countdown.h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
                 this.countdown.m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
                 this.countdown.s = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
+            }
+        },
+
+        submitMail() {
+            if (this.email.includes('@')) {
+                this.mailSubmitted = true;
+            } else {
+                alert("Veuillez entrer un email valide.");
             }
         },
 
@@ -51,6 +80,8 @@ document.addEventListener('alpine:init', () => {
 
         addToCart(product) {
             this.cart.push(product);
+            // Petit flash rouge sur le panier pour le feedback
+            this.cartOpen = true; 
         },
 
         removeFromCart(index) {
