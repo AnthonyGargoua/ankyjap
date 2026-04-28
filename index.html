@@ -144,15 +144,21 @@
         </section>
     </div>
 
-    <main x-show="page === 'shop'" class="max-w-7xl mx-auto py-12 px-6" x-transition x-cloak>
-        <div class="mb-12">
-            <h2 class="text-6xl md:text-8xl font-black italic uppercase leading-none">Nos <span class="text-red-600">Collections</span></h2>
-            <div class="flex gap-4 mt-8 overflow-x-auto pb-4">
-                <template x-for="cat in categories">
-                    <button @click="filter = cat.id" 
-                            :class="filter === cat.id ? 'bg-black text-white' : 'border-4 border-black'"
-                            class="px-8 py-2 font-black uppercase italic transition whitespace-nowrap skew-btn">
-                        <span class="skew-content" x-text="cat.name"></span>
+    <main x-show="page === 'shop'" 
+      :class="universes[filter].bg + ' ' + universes[filter].text"
+      class="min-h-screen py-12 px-6 transition-all duration-700" x-transition x-cloak>
+    
+    <div class="max-w-7xl mx-auto">
+        <div class="mb-16 border-b-8 transition-colors duration-700 pb-8" :class="universes[filter].accent">
+            <h2 class="text-7xl md:text-9xl font-black italic uppercase leading-none" x-text="universes[filter].title"></h2>
+            <p class="text-2xl italic font-bold mt-2" x-text="universes[filter].sub"></p>
+            
+            <div class="flex gap-4 mt-12 overflow-x-auto pb-4">
+                <template x-for="(u, id) in universes">
+                    <button @click="filter = id" 
+                            :class="filter === id ? 'bg-red-600 text-white' : 'border-4 border-current'"
+                            class="px-8 py-3 font-black uppercase italic transition-all skew-btn">
+                        <span class="skew-content" x-text="id === 'all' ? 'Multivers' : id"></span>
                     </button>
                 </template>
             </div>
@@ -160,46 +166,52 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
             <template x-for="product in products" :key="product.id">
-                <div x-show="filter === 'all' || product.category === filter" class="group border-4 border-black p-4 hover:shadow-[15px_15px_0px_#ff0000] transition-all duration-300">
-                    <div class="aspect-square overflow-hidden border-4 border-black relative mb-4">
-                        <img :src="product.image" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                        <div class="absolute top-2 left-2 bg-black text-white px-3 py-1 font-black text-xs skew-btn" x-text="product.collectionName"></div>
+                <div x-show="filter === 'all' || product.category === filter" 
+                     class="group border-4 p-4 transition-all duration-500 hover:shadow-[15px_15px_0px_#ff0000]"
+                     :class="universes[filter].accent">
+                    
+                    <div class="aspect-square overflow-hidden border-4 border-current relative mb-6">
+                        <img :src="product.images[product.selectedColor]" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500">
+                        <div class="absolute top-2 left-2 bg-red-600 text-white px-3 py-1 font-black text-xs skew-btn" x-text="product.collectionName"></div>
                     </div>
                     
-                    <h3 class="text-2xl font-black uppercase italic mb-2" x-text="product.name"></h3>
-                    <p class="text-red-600 font-black text-xl mb-4" x-text="product.price + '€'"></p>
+                    <h3 class="text-3xl font-black uppercase italic mb-2" x-text="product.name"></h3>
+                    <p class="font-black text-2xl mb-6" x-text="product.price + '€'"></p>
 
-                    <div class="space-y-4 mb-6">
+                    <div class="grid grid-cols-2 gap-4 mb-8">
                         <div>
-                            <span class="text-[10px] font-black uppercase italic">Taille :</span>
-                            <div class="flex gap-2 mt-1">
+                            <span class="text-[10px] font-black uppercase italic block mb-2 text-current opacity-60">Dimensions :</span>
+                            <div class="flex flex-wrap gap-2">
                                 <template x-for="size in sizes">
                                     <button @click="product.selectedSize = size" 
-                                            :class="product.selectedSize === size ? 'bg-black text-white' : 'border-2 border-black hover:bg-gray-100'"
+                                            :class="product.selectedSize === size ? 'bg-red-600 text-white border-red-600' : 'border-2 border-current'"
                                             class="w-10 h-10 font-black text-xs flex items-center justify-center transition" x-text="size"></button>
                                 </template>
                             </div>
                         </div>
                         <div>
-                            <span class="text-[10px] font-black uppercase italic">Couleur :</span>
-                            <div class="flex gap-2 mt-1">
+                            <span class="text-[10px] font-black uppercase italic block mb-2 text-current opacity-60">Teinte :</span>
+                            <div class="flex flex-wrap gap-3">
                                 <template x-for="color in product.colors">
                                     <button @click="product.selectedColor = color.name" 
-                                            :class="product.selectedColor === color.name ? 'ring-4 ring-red-600' : 'ring-2 ring-black'"
+                                            :class="product.selectedColor === color.name ? 'ring-4 ring-red-600 scale-110' : 'ring-2 ring-current'"
                                             :style="'background-color:' + color.hex"
-                                            class="w-6 h-6 rounded-full transition"></button>
+                                            class="w-7 h-7 rounded-full transition-all"></button>
                                 </template>
                             </div>
                         </div>
                     </div>
 
-                    <button @click="addToCart(product)" class="w-full bg-black text-white py-4 font-black uppercase italic skew-btn hover:bg-red-600 transition">
-                        <span class="skew-content">Ajouter au pack +</span>
+                    <button @click="addToCart(product)" 
+                            class="w-full py-5 font-black uppercase italic text-xl transition-all skew-btn bg-current text-white invert">
+                        <span class="skew-content">Invoquer dans le Pack +</span>
                     </button>
                 </div>
             </template>
         </div>
-    </main>
+    </div>
+</main>
 
     <main x-show="page === 'drop'" class="min-h-screen bg-black text-white flex flex-col items-center justify-center py-20 px-6" x-transition x-cloak>
         <div class="text-center max-w-2xl">
