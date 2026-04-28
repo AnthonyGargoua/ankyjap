@@ -103,7 +103,12 @@ document.addEventListener('alpine:init', () => {
         goToCheckout() { this.page = 'checkout'; this.cartOpen = false; window.scrollTo(0,0); },
         processOrder() { 
             this.orderStep = 2; 
-            setTimeout(() => { this.orderStep = 3; this.cart = []; }, 2500); 
+            setTimeout(() => { 
+                this.orderStep = 3; 
+                this.cart = []; // Vide le panier
+                // VIDE AUSSI LES INFOS DU CHECKOUT ICI :
+                this.formDataCheckout = { prenom: '', adresse: '', ville: '', cp: '' };
+            }, 2500); 
         },
         submitDropForm() { 
             this.showPopup = true;
