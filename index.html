@@ -3,93 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KYANTO | Deux identités, une seule direction</title>
+    <title>KYANTO | Boutique</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
         [x-cloak] { display: none !important; }
-        .skew-btn { transform: skewX(-15deg); transition: all 0.3s ease; }
+        .skew-btn { transform: skewX(-15deg); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .skew-content { transform: skewX(15deg); display: inline-block; }
-        .skew-btn:hover { transform: skewX(-15deg) scale(1.05); }
-        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        .animate-infinite-scroll { display: flex; width: max-content; animation: scroll 20s linear infinite; }
+        .shadow-hyper { shadow-offset: 10px 10px; shadow-color: #000; }
     </style>
 </head>
-<body class="bg-white text-black font-sans overflow-x-hidden" x-data="shop">
+<body class="bg-white text-black font-sans" x-data="shop">
 
-    <nav class="sticky top-0 z-[100] bg-white border-b-4 border-black px-4 h-20 flex justify-between items-center">
-        <div @click="page = 'home'" class="cursor-pointer font-black text-3xl italic tracking-tighter uppercase">
+    <nav class="sticky top-0 z-[100] bg-white border-b-4 border-black px-6 h-20 flex justify-between items-center">
+        <div @click="page = 'home'" class="cursor-pointer font-black text-4xl italic tracking-tighter uppercase">
             KY<span class="text-red-600">ANTO</span>
         </div>
         <div class="hidden md:flex space-x-8 font-black uppercase text-xs tracking-widest">
             <button @click="page = 'home'" :class="page === 'home' ? 'text-red-600' : ''">Accueil</button>
             <button @click="page = 'shop'" :class="page === 'shop' ? 'text-red-600' : ''">Boutique</button>
-            <button @click="page = 'drop'" :class="page === 'drop' ? 'text-red-600' : ''">Prochain Drop</button>
         </div>
-        <button @click="toggleCart(true)" class="relative p-2 border-4 border-black hover:bg-black hover:text-white transition">
+        <button @click="toggleCart(true)" class="relative p-3 border-4 border-black hover:bg-black hover:text-white transition shadow-[4px_4px_0px_#000]">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="3" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
             <span class="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] w-6 h-6 flex items-center justify-center rounded-full font-black border-2 border-black" x-text="cart.length"></span>
         </button>
     </nav>
 
-    <div x-show="page === 'home'" x-transition x-cloak>
+    <div x-show="page === 'home'" x-transition>
         <section class="bg-black text-white min-h-[90vh] flex flex-col justify-center items-center text-center px-6 relative overflow-hidden">
-            <h1 class="text-7xl md:text-[12rem] font-black italic uppercase leading-none z-10 animate__animated animate__fadeInDown">
-                KY<span class="text-red-600 underline">ANTO</span>
-            </h1>
-            <p class="text-xl md:text-3xl font-black italic uppercase tracking-[0.3em] mt-4 z-10 animate__animated animate__fadeInUp">
-                Deux identités, une seule direction
-            </p>
-            <button @click="page = 'shop'" class="mt-12 bg-red-600 text-white px-12 py-5 text-2xl font-black uppercase italic skew-btn z-10 shadow-[10px_10px_0px_#fff]">
-                <span class="skew-content">Voir la collection</span>
+            <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+            <h1 class="text-8xl md:text-[13rem] font-black italic uppercase leading-none z-10 animate__animated animate__zoomIn">KYANTO</h1>
+            <p class="text-2xl md:text-3xl font-black italic uppercase tracking-[0.4em] mt-4 z-10 text-red-600">Pure Streetwear Clan</p>
+            <button @click="page = 'shop'" class="mt-16 bg-red-600 text-white px-12 py-6 text-3xl font-black uppercase italic skew-btn z-10 shadow-[10px_10px_0px_#fff] hover:bg-white hover:text-red-600 hover:shadow-[10px_10px_0px_#ff0000]">
+                <span class="skew-content">Entrer dans le shop</span>
             </button>
-        </section>
-
-        <section class="py-24 max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-            <div class="border-8 border-black p-2 shadow-[20px_20px_0px_#ff0000]">
-                <img src="https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?q=80&w=2070" class="grayscale hover:grayscale-0 transition-all duration-1000">
-            </div>
-            <div>
-                <h2 class="text-5xl md:text-7xl font-black italic uppercase leading-tight mb-8">Un État<br><span class="text-red-600">d'Esprit.</span></h2>
-                <p class="text-xl font-bold italic leading-relaxed text-gray-800">
-                    KYANTO est née de l'histoire de deux amis d'enfance, Kyllian et Anthony. Deux personnalités, une seule passion nippone.
-                </p>
-            </div>
         </section>
     </div>
 
-    <div x-show="page === 'shop'" :class="universes[filter].bg + ' ' + universes[filter].text" class="min-h-screen py-12 px-6 transition-all duration-700" x-cloak>
+    <div x-show="page === 'shop'" :class="universes[filter].bg + ' ' + universes[filter].text" class="min-h-screen py-16 px-6 transition-all duration-1000" x-cloak>
         <div class="max-w-7xl mx-auto">
-            <h2 class="text-6xl md:text-8xl font-black italic uppercase leading-none mb-12" x-text="universes[filter].title"></h2>
+            <h2 class="text-7xl md:text-9xl font-black italic uppercase mb-12 animate__animated animate__fadeInLeft" x-text="universes[filter].title"></h2>
             
-            <div class="flex gap-4 mb-16 overflow-x-auto pb-4">
+            <div class="flex gap-4 mb-20 overflow-x-auto pb-4">
                 <template x-for="(u, id) in universes">
                     <button @click="filter = id" 
                             :class="filter === id ? 'bg-red-600 text-white border-red-600' : 'border-4 border-current'"
-                            class="px-8 py-3 font-black uppercase italic transition whitespace-nowrap skew-btn">
-                        <span class="skew-content" x-text="id === 'all' ? 'Multivers' : id"></span>
+                            class="px-10 py-4 font-black uppercase italic text-xl skew-btn transition-all">
+                        <span class="skew-content" x-text="id"></span>
                     </button>
                 </template>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
                 <template x-for="product in products" :key="product.id">
-                    <div x-show="filter === 'all' || product.category === filter" class="group border-4 border-current p-4 hover:shadow-[15px_15px_0px_#ff0000] transition-all">
-                        <img :src="product.images[product.selectedColor]" class="w-full aspect-square object-cover border-4 border-current mb-6">
-                        <h3 class="text-3xl font-black uppercase italic mb-2" x-text="product.name"></h3>
-                        <p class="font-black text-2xl mb-6" x-text="product.price + '€'"></p>
+                    <div x-show="filter === 'all' || product.category === filter" 
+                         class="group border-8 border-current p-6 transition-all hover:shadow-[20px_20px_0px_#ff0000] bg-opacity-10 bg-white">
+                        <img :src="product.images[product.selectedColor]" class="w-full aspect-square object-cover border-4 border-current mb-8 grayscale group-hover:grayscale-0 transition-all duration-500">
+                        <h3 class="text-4xl font-black uppercase italic mb-2" x-text="product.name"></h3>
+                        <p class="text-3xl font-black mb-8" x-text="product.price + '€'"></p>
                         
-                        <div class="flex gap-2 mb-6">
+                        <div class="flex gap-4 mb-8 font-black uppercase">
                             <template x-for="color in product.colors">
                                 <button @click="product.selectedColor = color.name" 
-                                        :class="product.selectedColor === color.name ? 'ring-4 ring-red-600' : 'ring-2 ring-current'"
-                                        :style="'background-color:' + color.hex" class="w-8 h-8 rounded-full transition-all"></button>
+                                        :class="product.selectedColor === color.name ? 'scale-125 border-red-600' : 'border-current'"
+                                        :style="'background-color:' + color.hex" class="w-10 h-10 border-4 transition-all"></button>
                             </template>
                         </div>
 
-                        <button @click="addToCart(product)" class="w-full bg-black text-white py-4 font-black uppercase italic text-xl skew-btn hover:bg-red-600">
-                            <span class="skew-content">Ajouter au Pack +</span>
+                        <button @click="addToCart(product)" class="w-full bg-current text-white py-5 font-black uppercase italic text-2xl skew-btn mix-blend-difference hover:bg-red-600">
+                            <span class="skew-content">Ajouter au Clan +</span>
                         </button>
                     </div>
                 </template>
@@ -97,82 +80,69 @@
         </div>
     </div>
 
-    <div x-show="page === 'checkout'" class="min-h-screen bg-gray-100 py-16 px-6" x-cloak>
-        <div class="max-w-5xl mx-auto" x-show="orderStep < 3">
-            <h2 class="text-5xl font-black uppercase italic mb-10">Finaliser la <span class="text-red-600">Mission</span></h2>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <div class="bg-white border-8 border-black p-8 shadow-[15px_15px_0px_#000]">
+    <div x-show="page === 'checkout'" class="min-h-screen bg-zinc-100 py-20 px-6" x-cloak>
+        <div class="max-w-6xl mx-auto" x-show="orderStep < 3">
+            <h2 class="text-6xl font-black uppercase italic mb-16">Logistique <span class="text-red-600">Kyanto</span></h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                <div class="bg-white border-[10px] border-black p-10 shadow-[20px_20px_0px_#000]">
                     <div class="space-y-6">
-                        <input type="text" x-model="formData.prenom" placeholder="Prénom" class="w-full border-4 border-black p-4 font-black uppercase text-xl">
-                        <input type="text" x-model="formData.adresse" placeholder="Adresse de livraison" class="w-full border-4 border-black p-4 font-black uppercase text-xl">
-                        <button @click="processOrder()" class="w-full bg-red-600 text-white py-5 font-black uppercase italic text-2xl skew-btn shadow-[5px_5px_0px_#000]">
-                            <span class="skew-content" x-text="orderStep === 2 ? 'Traitement...' : 'Confirmer Paiement'"></span>
+                        <input type="text" x-model="formData.prenom" placeholder="Prénom" class="w-full border-4 border-black p-5 font-black uppercase text-2xl outline-none focus:bg-red-50">
+                        <input type="text" x-model="formData.adresse" placeholder="Adresse" class="w-full border-4 border-black p-5 font-black uppercase text-2xl outline-none focus:bg-red-50">
+                        <button @click="processOrder()" class="w-full bg-red-600 text-white py-6 font-black uppercase italic text-3xl skew-btn shadow-[8px_8px_0px_#000]">
+                            <span class="skew-content" x-text="orderStep === 2 ? 'TRAITEMENT...' : 'PAYER MAINTENANT'"></span>
                         </button>
                     </div>
                 </div>
-                <div class="bg-black text-white p-8 border-t-8 border-red-600">
-                    <h3 class="text-2xl font-black uppercase mb-6">Récapitulatif</h3>
+                <div class="bg-black text-white p-10 border-t-[15px] border-red-600 h-fit">
+                    <h3 class="text-3xl font-black uppercase italic mb-8 border-b-2 border-white/20 pb-4">Récapitulatif</h3>
                     <template x-for="item in cart">
-                        <div class="flex justify-between border-b border-white/20 pb-2 mb-2 uppercase text-xs font-black">
-                            <span x-text="item.name"></span>
-                            <span x-text="item.price + '€'"></span>
+                        <div class="flex justify-between items-center mb-4 font-black uppercase italic">
+                            <span class="text-lg" x-text="item.name"></span>
+                            <span class="text-xl text-red-600" x-text="item.price + '€'"></span>
                         </div>
                     </template>
-                    <div class="mt-8 pt-4 border-t-4 border-white flex justify-between text-3xl font-black italic uppercase">
+                    <div class="mt-12 text-5xl font-black italic uppercase flex justify-between">
                         <span>Total</span>
                         <span x-text="(totalPrice() + shipping).toFixed(2) + '€'"></span>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <div x-show="orderStep === 3" class="text-center py-20 animate__animated animate__zoomIn">
-            <h2 class="text-8xl font-black italic uppercase mb-4 text-red-600">Mission Accomplie</h2>
-            <p class="text-2xl font-bold uppercase tracking-widest mb-12">Merci <span x-text="formData.prenom"></span>. Commande enregistrée.</p>
-            <button @click="page = 'home'; orderStep = 1" class="bg-black text-white px-12 py-4 font-black uppercase italic skew-btn">
-                <span class="skew-content">Retour au QG</span>
+        <div x-show="orderStep === 3" class="text-center py-20 animate__animated animate__jackInTheBox">
+            <h2 class="text-9xl font-black italic uppercase text-red-600 mb-6">MERCI.</h2>
+            <p class="text-3xl font-black uppercase tracking-[0.5em]">Commande #KYA-OK validée</p>
+            <button @click="page = 'home'; orderStep = 1" class="mt-16 bg-black text-white px-12 py-5 font-black uppercase italic text-xl skew-btn shadow-[8px_8px_0px_#ff0000]">
+                <span class="skew-content">Retour à l'accueil</span>
             </button>
         </div>
     </div>
 
-    <footer class="bg-black text-white py-20 px-6 border-t-8 border-red-600">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
-            <span class="text-5xl font-black italic uppercase">KY<span class="text-red-600">ANTO</span></span>
-            <div class="flex gap-10 font-black uppercase text-xs tracking-widest">
-                <a href="#" class="hover:text-red-600">Instagram</a>
-                <a href="#" class="hover:text-red-600">TikTok</a>
-            </div>
-            <p class="text-[10px] font-black text-gray-500 tracking-[0.5em]">© 2026 KYANTO CLOTHING</p>
-        </div>
-    </footer>
-
     <div x-show="cartOpen" class="fixed inset-0 z-[150]" x-cloak>
-        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="toggleCart(false)"></div>
-        <div class="absolute inset-y-0 right-0 w-full max-w-md bg-white border-l-8 border-black flex flex-col shadow-2xl">
-            <div class="p-6 border-b-8 border-black bg-black text-white flex justify-between items-center">
-                <h2 class="text-3xl font-black uppercase italic tracking-tighter">Ton Pack</h2>
-                <button @click="toggleCart(false)" class="text-4xl font-black">&times;</button>
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" @click="toggleCart(false)"></div>
+        <div class="absolute inset-y-0 right-0 w-full max-w-md bg-white border-l-[12px] border-black flex flex-col">
+            <div class="p-8 bg-black text-white flex justify-between items-center border-b-[12px] border-red-600">
+                <h2 class="text-4xl font-black uppercase italic">Ton Pack</h2>
+                <button @click="toggleCart(false)" class="text-5xl font-black hover:text-red-600">&times;</button>
             </div>
-            <div class="flex-1 overflow-y-auto p-6">
+            <div class="flex-1 overflow-y-auto p-8 space-y-6">
                 <template x-for="(item, index) in cart">
-                    <div class="flex gap-4 border-b-4 border-gray-100 pb-4 mb-4">
-                        <img :src="item.finalImage" class="w-24 h-24 object-cover border-4 border-black">
+                    <div class="flex gap-6 border-b-4 border-gray-100 pb-6 items-center">
+                        <img :src="item.finalImage" class="w-28 h-28 object-cover border-4 border-black shadow-[5px_5px_0px_#ff0000]">
                         <div class="flex-1">
-                            <p class="font-black uppercase text-sm" x-text="item.name"></p>
-                            <p class="text-[10px] font-bold text-gray-400" x-text="item.selectedSize + ' | ' + item.selectedColor"></p>
-                            <button @click="removeFromCart(index)" class="text-[10px] text-red-600 font-black uppercase underline mt-2">Supprimer</button>
+                            <p class="font-black uppercase text-lg italic" x-text="item.name"></p>
+                            <button @click="removeFromCart(index)" class="text-xs font-black text-red-600 uppercase underline">Supprimer</button>
                         </div>
-                        <span class="font-black text-xl" x-text="item.price + '€'"></span>
+                        <span class="font-black text-2xl" x-text="item.price + '€'"></span>
                     </div>
                 </template>
             </div>
-            <div class="p-6 border-t-8 border-black bg-gray-50">
-                <div class="flex justify-between text-3xl font-black uppercase italic mb-6">
+            <div class="p-8 bg-gray-50 border-t-[12px] border-black">
+                <div class="flex justify-between text-4xl font-black uppercase italic mb-8">
                     <span>Total</span>
                     <span x-text="totalPrice() + '€'"></span>
                 </div>
-                <button @click="goToCheckout()" class="w-full bg-red-600 text-white py-5 font-black uppercase italic text-2xl skew-btn shadow-[6px_6px_0px_#000]">
-                    <span class="skew-content">Passer au Checkout</span>
+                <button @click="goToCheckout()" class="w-full bg-red-600 text-white py-6 font-black uppercase italic text-2xl skew-btn shadow-[10px_10px_0px_#000]">
+                    <span class="skew-content">VALIDER LE PACK</span>
                 </button>
             </div>
         </div>
