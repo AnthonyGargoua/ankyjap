@@ -7,6 +7,17 @@ document.addEventListener('alpine:init', () => {
         cart: [],
         sizes: ['S', 'M', 'L', 'XL'],
         
+        // --- NOUVELLES VARIABLES CHECKOUT ---
+        shipping: 5.90,
+        orderStep: 1, 
+        formData: {
+            prenom: '',
+            nom: '',
+            adresse: '',
+            ville: '',
+            cp: ''
+        },
+
         // DÉFINITION DES UNIVERS
         universes: {
             all: { bg: 'bg-white', text: 'text-black', accent: 'border-red-600', title: 'NOS COLLECTIONS' },
