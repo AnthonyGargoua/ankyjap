@@ -107,8 +107,8 @@ document.addEventListener('alpine:init', () => {
         },
         submitDropForm() { 
             this.showPopup = true;
-            this.formData.prenom = ''; 
-            this.formData.email = '';
+            this.formDataDrop.prenom = ''; 
+            this.formDataDrop.email = '';
         }
     }));
 });
