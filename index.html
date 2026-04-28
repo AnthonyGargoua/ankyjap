@@ -11,8 +11,48 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/animations.css">
+    
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
 </head>
 <body class="bg-white text-black font-sans overflow-x-hidden" x-data="shop">
+
+    <div x-show="cartOpen" 
+         class="fixed inset-0 z-[100] overflow-hidden" 
+         x-cloak>
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" @click="toggleCart(false)"></div>
+        <div class="absolute inset-y-0 right-0 w-full max-w-md bg-white border-l-8 border-black shadow-2xl p-8 flex flex-col">
+            <div class="flex justify-between items-center mb-10">
+                <h2 class="text-3xl font-black uppercase italic">Ton Pack</h2>
+                <button @click="toggleCart(false)" class="text-4xl font-black">&times;</button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto space-y-6">
+                <template x-for="(item, index) in cart" :key="item.cartId">
+                    <div class="flex gap-4 border-b-2 border-gray-100 pb-4">
+                        <img :src="item.image" class="w-20 h-20 object-cover border-2 border-black">
+                        <div class="flex-1">
+                            <h4 class="font-black uppercase text-sm" x-text="item.name"></h4>
+                            <p class="text-red-600 font-bold" x-text="item.price + '€'"></p>
+                            <button @click="cart.splice(index, 1)" class="text-[10px] uppercase font-black text-gray-400 hover:text-black mt-2 underline">Supprimer</button>
+                        </div>
+                    </div>
+                </template>
+                <template x-if="cart.length === 0">
+                    <p class="text-center font-bold text-gray-400 italic">Ton pack est vide pour le moment.</p>
+                </template>
+            </div>
+
+            <div class="border-t-4 border-black pt-6 mt-6">
+                <div class="flex justify-between text-2xl font-black uppercase mb-6">
+                    <span>Total</span>
+                    <span class="text-red-600" x-text="totalPrice() + '€'"></span>
+                </div>
+                <button class="w-full bg-black text-white py-5 font-black uppercase hover:bg-red-600 transition-colors">Commander</button>
+            </div>
+        </div>
+    </div>
 
     <nav class="sticky top-0 z-50 bg-white border-b-4 border-black" x-data="{ mobileMenu: false }">
         <div class="max-w-7xl mx-auto px-4 flex justify-between h-20 items-center">
@@ -21,17 +61,17 @@
             </div>
             
             <div class="hidden md:flex space-x-8 font-black uppercase text-sm tracking-widest">
-                <button @click="page = 'home'" :class="page === 'home' ? 'text-red-600' : ''">Accueil</button>
-                <button @click="page = 'shop'" :class="page === 'shop' ? 'text-red-600' : ''">Boutique</button>
-                <button @click="page = 'drop'" :class="page === 'drop' ? 'text-red-600' : ''" class="flex items-center">
+                <button @click="page = 'home'" :class="page === 'home' ? 'text-red-600 border-b-2 border-red-600' : ''">Accueil</button>
+                <button @click="page = 'shop'" :class="page === 'shop' ? 'text-red-600 border-b-2 border-red-600' : ''">Boutique</button>
+                <button @click="page = 'drop'" :class="page === 'drop' ? 'text-red-600 border-b-2 border-red-600' : ''" class="flex items-center">
                     <span class="w-2 h-2 bg-red-600 rounded-full mr-2 animate-ping"></span>DROP
                 </button>
             </div>
 
             <div class="flex items-center gap-4">
-                <button @click="toggleCart(true)" class="relative p-2">
+                <button @click="toggleCart(true)" class="relative p-2 hover:scale-110 transition">
                     <svg class="w-7 h-7 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                    <span class="absolute top-0 right-0 bg-red-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-black" x-text="cart.length"></span>
+                    <span class="absolute top-0 right-0 bg-red-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-black animate-bounce" x-show="cart.length > 0" x-text="cart.length"></span>
                 </button>
                 <button @click="mobileMenu = !mobileMenu" class="md:hidden">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
@@ -40,15 +80,15 @@
         </div>
 
         <div x-show="mobileMenu" x-transition x-cloak class="md:hidden bg-black text-white p-6 space-y-4 font-black uppercase text-center">
-            <button @click="page = 'home'; mobileMenu = false" class="block w-full">Accueil</button>
-            <button @click="page = 'shop'; mobileMenu = false" class="block w-full">Boutique</button>
-            <button @click="page = 'drop'; mobileMenu = false" class="block w-full text-red-600">Prochain Drop</button>
+            <button @click="page = 'home'; mobileMenu = false" class="block w-full py-2">Accueil</button>
+            <button @click="page = 'shop'; mobileMenu = false" class="block w-full py-2">Boutique</button>
+            <button @click="page = 'drop'; mobileMenu = false" class="block w-full py-2 text-red-600">Prochain Drop</button>
         </div>
     </nav>
 
     <main>
-        <div x-show="page === 'home'" x-transition x-cloak>
-            <section class="hero-section min-h-[80vh] flex items-center justify-center bg-black relative">
+        <div x-show="page === 'home'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-cloak>
+            <section class="hero-section min-h-[85vh] flex items-center justify-center bg-black relative">
                 <div class="text-center z-10 px-4">
                     <h1 class="glitch-title text-5xl md:text-9xl font-black text-white italic">KYANTO</h1>
                     <p class="text-white text-sm md:text-xl tracking-[0.4em] font-black italic mt-4 uppercase">Deux identités, une seule direction</p>
@@ -56,14 +96,14 @@
                 </div>
             </section>
 
-            <section class="py-16 md:py-24 max-w-7xl mx-auto px-6">
+            <section class="py-20 md:py-32 max-w-7xl mx-auto px-6">
                 <div class="flex flex-col md:flex-row items-center gap-10 md:gap-16">
                     <div class="w-full md:w-1/2 ink-splash-mask shadow-2xl overflow-hidden border-4 border-black aos-init">
-                        <img src="https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?q=80&w=2070" class="w-full h-full object-cover">
+                        <img src="https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?q=80&w=2070" class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-1000">
                     </div>
                     <div class="w-full md:w-1/2 aos-init">
-                        <h2 class="text-4xl md:text-6xl font-black italic uppercase leading-none">Une marque qui<br><span class="text-red-600 italic">Représente un état d'esprit</span></h2>
-                        <p class="text-lg md:text-xl font-bold mt-6 italic">KYANTO est née de l'histoire de deux amis d'enfance, Kyllian et Anthony. Deux personnalités différentes, mais une même façon de voir le monde.</p>
+                        <h2 class="text-4xl md:text-6xl font-black italic uppercase leading-tight">Une marque qui<br><span class="text-red-600 italic underline decoration-black">Représente un état d'esprit</span></h2>
+                        <p class="text-lg md:text-xl font-bold mt-8 italic text-gray-800">KYANTO est née de l'histoire de deux amis d'enfance, Kyllian et Anthony. Deux personnalités différentes, mais une même façon de voir le monde.</p>
                     </div>
                 </div>
             </section>
@@ -72,15 +112,15 @@
                 <div class="animate-infinite-scroll">
                     <template x-for="i in 2">
                         <div class="flex">
-                            <template x-for="product in products" :key="product.id">
+                            <template x-for="product in products" :key="product.id + '-' + i">
                                 <div class="w-[280px] md:w-[350px] bg-white border-4 border-black p-4 mx-4 flex flex-col group">
                                     <div class="relative overflow-hidden">
-                                        <img :src="product.image" class="w-full h-64 object-cover">
+                                        <img :src="product.image" class="w-full h-64 object-cover grayscale group-hover:grayscale-0 transition duration-500">
                                         <button @click="addToCart(product)" class="absolute inset-x-0 bottom-0 bg-red-600 text-white py-3 font-black uppercase translate-y-full group-hover:translate-y-0 transition-transform text-sm">Ajouter +</button>
                                     </div>
-                                    <div class="flex justify-between items-center mt-4">
-                                        <h3 class="text-lg font-black uppercase" x-text="product.name"></h3>
-                                        <span class="text-red-600 font-black" x-text="product.price + '€'"></span>
+                                    <div class="flex justify-between items-center mt-4 font-black">
+                                        <h3 class="text-lg uppercase" x-text="product.name"></h3>
+                                        <span class="text-red-600" x-text="product.price + '€'"></span>
                                     </div>
                                 </div>
                             </template>
@@ -90,7 +130,7 @@
             </section>
         </div>
 
-        <div x-show="page === 'shop'" class="max-w-7xl mx-auto py-12 md:py-20 px-6" x-transition x-cloak>
+        <div x-show="page === 'shop'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-4" x-transition:enter-end="opacity-100 translate-x-0" x-cloak class="max-w-7xl mx-auto py-12 md:py-20 px-6">
             <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b-8 border-black pb-6 gap-6">
                 <div>
                     <h2 class="text-5xl md:text-8xl font-black italic uppercase leading-none">Stock<span class="text-red-600">.01</span></h2>
@@ -121,20 +161,24 @@
             </div>
         </div>
 
-        <div x-show="page === 'drop'" class="min-h-screen bg-black text-white flex flex-col justify-center items-center px-4" x-transition x-cloak>
-            <h2 class="text-5xl md:text-[10rem] font-black italic leading-none mb-8 text-center">JUNE <span class="text-red-600">2026</span></h2>
+        <div x-show="page === 'drop'" x-transition:enter="transition ease-in duration-500" x-cloak class="min-h-screen bg-black text-white flex flex-col justify-center items-center px-4">
+            <h2 class="text-5xl md:text-[10rem] font-black italic leading-none mb-8 text-center animate__animated animate__zoomIn">JUNE <span class="text-red-600">2026</span></h2>
             <div class="grid grid-cols-2 md:flex gap-4 md:gap-10 mb-16">
-                <div class="bg-white text-black p-4 md:p-6 border-b-8 border-red-600 text-center"><span class="text-4xl md:text-7xl font-black" x-text="countdown.d"></span><p class="text-xs font-bold uppercase">Jours</p></div>
-                <div class="bg-white text-black p-4 md:p-6 border-b-8 border-red-600 text-center"><span class="text-4xl md:text-7xl font-black" x-text="countdown.h"></span><p class="text-xs font-bold uppercase">Heures</p></div>
-                <div class="bg-white text-black p-4 md:p-6 border-b-8 border-red-600 text-center"><span class="text-4xl md:text-7xl font-black" x-text="countdown.m"></span><p class="text-xs font-bold uppercase">Mins</p></div>
-                <div class="bg-white text-black p-4 md:p-6 border-b-8 border-red-600 text-center"><span class="text-4xl md:text-7xl font-black" x-text="countdown.s"></span><p class="text-xs font-bold uppercase">Secs</p></div>
+                <div class="bg-white text-black p-4 md:p-6 border-b-8 border-red-600 text-center shadow-[8px_8px_0px_#ff0000]"><span class="text-4xl md:text-7xl font-black" x-text="countdown.d"></span><p class="text-xs font-bold uppercase">Jours</p></div>
+                <div class="bg-white text-black p-4 md:p-6 border-b-8 border-red-600 text-center shadow-[8px_8px_0px_#ff0000]"><span class="text-4xl md:text-7xl font-black" x-text="countdown.h"></span><p class="text-xs font-bold uppercase">Heures</p></div>
+                <div class="bg-white text-black p-4 md:p-6 border-b-8 border-red-600 text-center shadow-[8px_8px_0px_#ff0000]"><span class="text-4xl md:text-7xl font-black" x-text="countdown.m"></span><p class="text-xs font-bold uppercase">Mins</p></div>
+                <div class="bg-white text-black p-4 md:p-6 border-b-8 border-red-600 text-center shadow-[8px_8px_0px_#ff0000]"><span class="text-4xl md:text-7xl font-black" x-text="countdown.s"></span><p class="text-xs font-bold uppercase">Secs</p></div>
             </div>
+            <p class="text-xl font-black italic animate-pulse">SOYEZ PRÊTS POUR LE PROCHAIN DROP.</p>
         </div>
     </main>
 
     <footer class="bg-black text-white pt-20 pb-10 border-t-8 border-red-600">
         <div class="max-w-7xl mx-auto px-6 text-center">
-            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">© 2026 KYANTO - DESIGNER AVEC L'ESPRIT JAPONAIS</p>
+            <div class="mb-10">
+                <span class="text-4xl font-black italic uppercase">KY<span class="text-red-600">ANTO</span></span>
+            </div>
+            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.5em]">© 2026 KYANTO - DESIGNER AVEC L'ESPRIT JAPONAIS</p>
         </div>
     </footer>
 
