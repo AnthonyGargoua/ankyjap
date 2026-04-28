@@ -137,6 +137,59 @@
         </div>
     </div>
 
+    <div x-show="page === 'faq'" class="min-h-screen bg-white py-20 px-6" x-cloak x-transition>
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-7xl font-black italic uppercase mb-12 border-b-8 border-black pb-4">Questions <span class="text-red-600">Fréquentes</span></h2>
+            <div class="space-y-8">
+                <div class="border-4 border-black p-6 shadow-[8px_8px_0px_#000]">
+                    <h3 class="text-2xl font-black uppercase mb-2">Comment taillent les produits ?</h3>
+                    <p class="font-bold italic text-gray-600 uppercase text-sm">Nos hoodies et t-shirts ont une coupe "Oversize" japonaise. Si tu veux un look ajusté, prends une taille en-dessous.</p>
+                </div>
+                <div class="border-4 border-black p-6 shadow-[8px_8px_0px_#000]">
+                    <h3 class="text-2xl font-black uppercase mb-2">Les drops sont-ils limités ?</h3>
+                    <p class="font-bold italic text-gray-600 uppercase text-sm">Oui. Chaque pièce est produite en quantité limitée pour garantir l'exclusivité du Clan.</p>
+                </div>
+            </div>
+            <button @click="page = 'home'" class="mt-12 underline font-black uppercase">Retour au QG</button>
+        </div>
+    </div>
+
+    <div x-show="page === 'livraison'" class="min-h-screen bg-gray-100 py-20 px-6" x-cloak x-transition>
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-7xl font-black italic uppercase mb-12 border-b-8 border-red-600 pb-4 text-black">Logistique <span class="text-red-600">Mondiale</span></h2>
+            <div class="bg-black text-white p-10 skew-btn shadow-[15px_15px_0px_#ff0000]">
+                <div class="skew-content w-full">
+                    <p class="text-2xl font-black uppercase mb-6 italic text-red-600">Délais d'expédition</p>
+                    <ul class="space-y-4 font-bold uppercase tracking-widest text-sm">
+                        <li>• France : 3-5 jours ouvrés</li>
+                        <li>• Europe : 5-8 jours ouvrés</li>
+                        <li>• International : 10-15 jours ouvrés</li>
+                    </ul>
+                    <p class="mt-8 border-t border-white/20 pt-4 text-[10px]">Toutes nos commandes sont suivies avec un numéro de tracking envoyé par email.</p>
+                </div>
+            </div>
+            <button @click="page = 'home'" class="mt-12 underline font-black uppercase text-black">Retour au QG</button>
+        </div>
+    </div>
+
+    <div x-show="page === 'retours'" class="min-h-screen bg-white py-20 px-6" x-cloak x-transition>
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-7xl font-black italic uppercase mb-8">Politique de <span class="text-red-600 underline">Retour</span></h2>
+            <div class="border-[10px] border-black p-12 inline-block text-left">
+                <p class="text-xl font-black uppercase italic mb-6">Satisfait ou banni du clan.</p>
+                <p class="font-bold uppercase text-gray-500 mb-8 leading-relaxed">
+                    Tu as 14 jours dès réception de ton pack pour nous le renvoyer si la taille ne va pas.<br>
+                    Le produit doit être intact, non porté, avec l'étiquette d'origine.
+                </p>
+                <div class="bg-red-600 text-white p-4 font-black uppercase italic text-center">
+                    Contacte support@kyanto.com pour initier le retour.
+                </div>
+            </div>
+            <br>
+            <button @click="page = 'home'" class="mt-12 underline font-black uppercase inline-block">Retour au QG</button>
+        </div>
+    </div>
+
     <footer class="bg-black text-white pt-20 pb-10 px-6 border-t-[12px] border-red-600 relative overflow-hidden">
         <div class="absolute top-0 right-0 text-[15rem] font-black italic text-white/5 pointer-events-none select-none translate-x-1/4 -translate-y-1/4">KYANTO</div>
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10 text-left">
@@ -147,17 +200,17 @@
             <div>
                 <h4 class="font-black uppercase text-red-600 mb-6 italic tracking-tighter">Collections</h4>
                 <ul class="space-y-3 text-xs font-bold uppercase tracking-widest">
-                    <li><button @click="page='shop'; filter='tokyo'" class="hover:text-red-600 transition">Tokyo Nights</button></li>
-                    <li><button @click="page='shop'; filter='cyber'" class="hover:text-red-600 transition">Cyber-Punk</button></li>
-                    <li><button @click="page='shop'; filter='zen'" class="hover:text-red-600 transition">Zen Minimal</button></li>
+                    <li><button @click="page='shop'; filter='tokyo'; window.scrollTo(0,0)" class="hover:text-red-600 transition">Tokyo Nights</button></li>
+                    <li><button @click="page='shop'; filter='cyber'; window.scrollTo(0,0)" class="hover:text-red-600 transition">Cyber-Punk</button></li>
+                    <li><button @click="page='shop'; filter='zen'; window.scrollTo(0,0)" class="hover:text-red-600 transition">Zen Minimal</button></li>
                 </ul>
             </div>
             <div>
                 <h4 class="font-black uppercase text-red-600 mb-6 italic tracking-tighter">Support</h4>
                 <ul class="space-y-3 text-xs font-bold uppercase tracking-widest">
-                    <li><a href="#" class="hover:text-red-600 transition">FAQ</a></li>
-                    <li><a href="#" class="hover:text-red-600 transition">Livraison</a></li>
-                    <li><a href="#" class="hover:text-red-600 transition">Retours</a></li>
+                    <li><button @click="page='faq'; window.scrollTo(0,0)" class="hover:text-red-600 transition text-left">FAQ</button></li>
+                    <li><button @click="page='livraison'; window.scrollTo(0,0)" class="hover:text-red-600 transition text-left">Livraison</button></li>
+                    <li><button @click="page='retours'; window.scrollTo(0,0)" class="hover:text-red-600 transition text-left">Retours</button></li>
                 </ul>
             </div>
             <div>
