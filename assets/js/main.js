@@ -1,5 +1,6 @@
 document.addEventListener('alpine:init', () => {
     Alpine.data('shop', () => ({
+        mobileMenu: false,
         page: 'home',
         filter: 'all',
         cartOpen: false,
